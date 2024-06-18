@@ -29,6 +29,7 @@ db.sequelize = sequelize;
 
 // table name
 db.users = require("./UserModel.js")(sequelize, DataTypes);
+db.driver = require("./DriverModel.js")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   // console.log("------------ Congratulation You are in Sync -------------- ");

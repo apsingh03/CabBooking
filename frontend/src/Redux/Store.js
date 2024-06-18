@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import UserAuthenticationSlice from "./Slices/UserAuthenticationSlice";
+import DriverAuthenticationSlice from "./Slices/DriverAuthenticationSlice";
 
 export const store = configureStore({
   reducer: {
-    auth: UserAuthenticationSlice,
+    userAuth: UserAuthenticationSlice,
+    driverAuth: DriverAuthenticationSlice,
   },
 });

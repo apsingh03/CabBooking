@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define(
-    "users",
+  const Driver = sequelize.define(
+    "driver",
     {
       fullName: {
         type: DataTypes.STRING,
@@ -15,6 +15,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+    
+      isAvailable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      latitude: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+      },
+      longitude: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+      },
+
       createdAt: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -29,5 +43,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  return Users;
+  return Driver;
 };

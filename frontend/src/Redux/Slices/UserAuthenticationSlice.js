@@ -76,26 +76,10 @@ const initialState = {
       localStorage.getItem("loggedDataToken") !== null
         ? jwtDecode(localStorage.getItem("loggedDataToken")).email
         : null,
-    userType:
-      localStorage.getItem("loggedDataToken") !== null
-        ? jwtDecode(localStorage.getItem("loggedDataToken")).userType
-        : null,
-    isAvailable:
-      localStorage.getItem("loggedDataToken") !== null
-        ? jwtDecode(localStorage.getItem("loggedDataToken")).isAvailable
-        : null,
-    latitude:
-      localStorage.getItem("loggedDataToken") !== null
-        ? jwtDecode(localStorage.getItem("loggedDataToken")).latitude
-        : null,
-    longitude:
-      localStorage.getItem("loggedDataToken") !== null
-        ? jwtDecode(localStorage.getItem("loggedDataToken")).longitude
-        : null,
   },
 };
 
-export const authenticationSlice = createSlice({
+export const userAuthSlice = createSlice({
   name: "users",
   initialState,
   reducers: {},
@@ -146,4 +130,4 @@ export const authenticationSlice = createSlice({
   },
 });
 
-export default authenticationSlice.reducer;
+export default userAuthSlice.reducer;

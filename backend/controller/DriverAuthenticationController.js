@@ -1,16 +1,17 @@
-const db = require("../models/");
+const db = require("../models");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 
 // Tables
 const Users = db.users;
+const Driver = db.driver;
 const Sequelize = db.Sequelize;
 const sequelize = db.sequelize;
 
 const signUp = async (req, res) => {
   try {
-    // console.log("User Req.body - ", req.body);
-    const emailExistQuery = await Users.findOne({
+    // console.log(" Driver Req.body - ", req.body);
+    const emailExistQuery = await Driver.findOne({
       where: { email: req.body.email },
     });
 
@@ -22,10 +23,14 @@ const signUp = async (req, res) => {
       const saltRounds = 10;
 
       bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
-        const query = await Users.create({
+        const query = await Driver.create({
           fullName: req.body.fullName,
           email: req.body.email,
           password: hash,
+          isAvailable: 0,
+          latitude: req.body.latitude,
+          longitude: req.body.longitude,
+
           createdAt: Date.now(),
         });
 
@@ -40,7 +45,7 @@ const signUp = async (req, res) => {
 
 const logIn = async (req, res) => {
   try {
-    const emailExistQuery = await Users.findOne({
+    const emailExistQuery = await Driver.findOne({
       where: { email: req.body.email },
     });
 
@@ -54,12 +59,16 @@ const logIn = async (req, res) => {
           }
 
           if (result) {
-            const { id, fullName, email } = emailExistQuery;
+            const { id, fullName, email, isAvailable, latitude, longitude } =
+              emailExistQuery;
             const userObject = {
               isUserLogged: true,
               id,
               fullName,
               email,
+              isAvailable,
+              latitude,
+              longitude,
             };
 
             var token = jwt.sign(userObject, "itsASecretKey");

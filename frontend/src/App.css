@@ -14,3 +14,14 @@
 .dashboard {
   padding: 20px;
 }
+
+.userDashboard {
+  padding: 25px;
+  background-color: #ddd;
+}
+
+.userDashboard .userDashboard_card {
+  background-color: #fff;
+  padding: 10px;
+
+}

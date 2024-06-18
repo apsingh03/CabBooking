@@ -4,12 +4,13 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import {
-  createUserAsync,
-  loginUserAsync,
-} from "../Redux/Slices/UserAuthenticationSlice";
 
-const UserSignUp = () => {
+import {
+  createDriverAsync,
+  loginDriverAsync,
+} from "../Redux/Slices/DriverAuthenticationSlice";
+
+const DriverSignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [signUpIsLoading, setsignUpIsLoading] = useState(false);
@@ -62,30 +63,41 @@ const UserSignUp = () => {
     const fullName = event.target.signUpfullName.value;
     const email = event.target.signUpEmail.value;
     const password = event.target.signUpPassword.value;
+    const latitude = location.latitude;
+    const longitude = location.longitude;
 
-    const actionResult = await dispatch(
-      createUserAsync({
-        fullName,
-        email,
-        password,
-      })
-    );
-    // console.log("payload - ", actionResult.payload);
-    if (actionResult.payload.msg === "Email Already Exist") {
-      toast.error(actionResult.payload.msg);
-      document.querySelector("#signUpfullName").value = "";
-      setsignUpIsLoading(false);
-    }
-    if (actionResult.payload.msg === "Sign Up Successful") {
-      toast.success(actionResult.payload.msg);
-      // console.log("41 - ", actionResult);
-      document.querySelector("#signUpfullName").value = "";
-      document.querySelector("#signupEmail").value = "";
-      document.querySelector("#signupPassword").value = "";
-      setsignUpIsLoading(false);
-      // navigate("/");
-    }
+    const locationError = location.error;
 
+    if (locationError === "User denied Geolocation") {
+      toast.error("Please Allow Location");
+      setsignUpIsLoading(false);
+    } else {
+      const actionResult = await dispatch(
+        createDriverAsync({
+          fullName,
+          email,
+          password,
+
+          latitude,
+          longitude,
+        })
+      );
+      // console.log("payload - ", actionResult.payload);
+      if (actionResult.payload.msg === "Email Already Exist") {
+        toast.error(actionResult.payload.msg);
+        document.querySelector("#signUpfullName").value = "";
+        setsignUpIsLoading(false);
+      }
+      if (actionResult.payload.msg === "Sign Up Successful") {
+        toast.success(actionResult.payload.msg);
+        // console.log("41 - ", actionResult);
+        document.querySelector("#signUpfullName").value = "";
+        document.querySelector("#signupEmail").value = "";
+        document.querySelector("#signupPassword").value = "";
+        setsignUpIsLoading(false);
+        // navigate("/");
+      }
+    }
     // console.log(email, userType);
   }
 
@@ -102,7 +114,7 @@ const UserSignUp = () => {
       // console.log(event);
 
       const actionResult = await dispatch(
-        loginUserAsync({
+        loginDriverAsync({
           email: loginEmail,
           password: loginPassword,
         })
@@ -124,12 +136,12 @@ const UserSignUp = () => {
         toast.success(actionResult.payload.msg);
 
         // console.log("action Payload", actionResult.payload.token);
-        localStorage.setItem("loggedDataToken", actionResult.payload.token);
+        localStorage.setItem("loggedDriverToken", actionResult.payload.token);
         // window.location.replace("/");
         document.querySelector("#loginPassword").value = "";
         document.querySelector("#loginEmail").value = "";
         setlogInIsLoading(false);
-        window.location.replace("/");
+        window.location.replace("/driverDashboard");
       }
     } catch (error) {
       console.log("Error handleLogin ", error.message);
@@ -142,7 +154,7 @@ const UserSignUp = () => {
 
       <div className="authentication">
         <div className="col-12 row  ">
-          <h4 className="text-center"> User Sign Up </h4>
+          <h4 className="text-center"> Driver Sign Up </h4>
 
           <div className="col-12 col-md-6">
             <div className="card">
@@ -192,6 +204,17 @@ const UserSignUp = () => {
                   />
                 </div>
 
+                <div className="mb-3 d-flex flex-row justify-content-between ">
+                  <p>
+                    {" "}
+                    <b>Latitude -</b> {location.latitude}
+                  </p>
+                  <p>
+                    {" "}
+                    <b>Longitude - </b> {location.longitude}
+                  </p>
+                </div>
+
                 <button type="submit" className="btn btn-primary">
                   Sign Up
                 </button>
@@ -203,7 +226,7 @@ const UserSignUp = () => {
             <div className="card">
               <form onSubmit={handleLogin}>
                 <div className="d-flex flex-row justify-content-center p-2 ">
-                  <h4 className=" text-dark px-3 ">Log In </h4>
+                  <h4 className=" text-dark px-3 ">Driver Log In </h4>
                   {logInIsLoading ? (
                     <div className="spinner-border" role="status"></div>
                   ) : null}
@@ -234,11 +257,6 @@ const UserSignUp = () => {
                   Login
                 </button>
               </form>
-
-              <div className="mt-2">
-                <p>Email - ajay@gmail.com</p>
-                <p>Password - ajay</p>
-              </div>
             </div>
           </div>
         </div>
@@ -247,4 +265,4 @@ const UserSignUp = () => {
   );
 };
 
-export default UserSignUp;
+export default DriverSignUp;

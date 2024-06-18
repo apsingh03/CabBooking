@@ -16,7 +16,10 @@ app.use(cors(corsOptions));
 
 const userAuthRoute = require("./routes/UserAuthenticationRoutes");
 
+const driverAuthRoute = require("./routes/DriverAuthenticationRoutes");
+
 app.use("/userAuth", userAuthRoute);
+app.use("/driverAuth", driverAuthRoute);
 
 app.use("/", function (req, res) {
   try {

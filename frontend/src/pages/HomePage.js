@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
+import Header from "../components/UserHeader";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
-import UserDashboard from "../components/UserDashboard";
-import DriverDashboard from "../components/DriverDashboard";
+import UserDashboard from "./UserDashboard";
+import DriverDashboard from "./DriverDashboard";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const authReduxisAuthenticated = useSelector(
-    (state) => state.auth.loggedData
+  const userIsAuthenticated = useSelector((state) => state.userAuth.loggedData);
+
+  const DriverIsAuthenticated = useSelector(
+    (state) => state.driverAuth.loggedData
   );
+
+  console.log("DriverIsAuthenticated - ", DriverIsAuthenticated);
   const [isLoading, setisLoading] = useState(false);
 
   return (
     <>
       <Header />
-
-      {authReduxisAuthenticated.isUserLogged === true &&
-      authReduxisAuthenticated.userType === "User" ? (
-        <UserDashboard />
-      ) : (
-        <DriverDashboard />
-      )}
     </>
   );
 };
